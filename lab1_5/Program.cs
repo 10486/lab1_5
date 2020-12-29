@@ -9,14 +9,7 @@ namespace lab1_5
         static void Main(string[] args)
         {
             // Непосредственно лабиринт
-            var lab = new bool[][]
-            {
-                new bool[]{true, true, true, false},
-                new bool[]{ false, false, true, false},
-                new bool[]{ true, true, true, false},
-                new bool[]{ true, false, false, false},
-                new bool[]{ true, true, true, true},
-            };
+            var lab = new Labyrinth();
             var stack = new Stack<Point>();
             // Начало лабиринта
             stack.Push(new Point(0, 0));
@@ -32,11 +25,11 @@ namespace lab1_5
         /// <param name="stack">Стек для прохода по лабиринту</param>
         /// <param name="lab">Лабиринт</param>
         /// <returns>true если выход найден</returns>
-        static bool FindWay(Stack<Point> stack,bool[][] lab)
+        static bool FindWay(Stack<Point> stack, Labyrinth lab)
         {
             var last = stack.Check();
             // Если дошли до конца возвращаем true
-             if (last.X == lab[0].Length - 1 && last.Y == lab.Length - 1)
+             if (last.X == lab.Width - 1 && last.Y == lab.Height - 1)
             {
                 return true;
             }
@@ -52,14 +45,14 @@ namespace lab1_5
         /// <param name="lab">Лабиринт</param>
         /// <param name="to">Точка в которую мы идем</param>
         /// <returns>true если мы можем из этой точки дойти до конца лабиринта</returns>
-        static bool Move(Stack<Point> stack, bool[][] lab, Point to)
+        static bool Move(Stack<Point> stack, Labyrinth lab, Point to)
         {
             if (to.X < 0 || to.Y < 0)
             {
                 return false;
             }
             // Не уходим за границы и не ходим по уже пройденным местам
-            if (lab[0].Length > to.X && lab.Length > to.Y && lab[to.Y][to.X] == true && !stack.Contains(to))
+            if (lab.Clear(to) && !stack.Contains(to))
             {
                 stack.Push(to);
                 if (FindWay(stack, lab))
